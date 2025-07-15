@@ -1,0 +1,174 @@
+openapi: 3.0.0
+info:
+  title: Simple Bank API
+  version: 1.0.0
+  description: API for managing users in the Simple Bank application
+servers:
+  - url: http://localhost:{port}
+    description: Development server
+    variables:
+      port:
+        default: "3000"
+paths:
+  /api/users/createUser:
+    post:
+      summary: Create a new user
+      tags:
+        - Users
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - fullName
+                - email
+                - password
+                - bankId
+              properties:
+                fullName:
+                  type: string
+                  example: John Doe
+                email:
+                  type: string
+                  example: john.doe@example.com
+                password:
+                  type: string
+                  example: securePassword123
+                bankId:
+                  type: number
+                  example: 12345
+      responses:
+        '201':
+          description: User created successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: User created successfully
+        '500':
+          description: Error creating user
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Error creating user
+                  error:
+                    type: string
+                    example: Unknown error
+  /api/users/getUsers:
+    get:
+      summary: Retrieve all users
+      tags:
+        - Users
+      responses:
+        '201':
+          description: Users fetched successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Users fetched successfully
+                  users:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        id:
+                          type: string
+                        fullName:
+                          type: string
+                        email:
+                          type: string
+                        bankId:
+                          type: number
+        '500':
+          description: Error fetching users
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Error creating user
+                  error:
+                    type: string
+                    example: Unknown error
+  /api/users/getUser/{id}:
+    get:
+      summary: Retrieve a user by ID
+      tags:
+        - Users
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: string
+          description: The user ID
+      responses:
+        '201':
+          description: User fetched successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Users fetched successfully
+                  singleUser:
+                    type: object
+                    properties:
+                      id:
+                        type: string
+                      fullName:
+                        type: string
+                      email:
+                        type: string
+                      bankId:
+                        type: number
+        '400':
+          description: Invalid user ID
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Invalid user ID
+        '404':
+          description: User not found
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: User not found
+        '500':
+          description: Error fetching user
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Error fetching user
+                  error:
+                    type: string
+                    example: Unknown error
