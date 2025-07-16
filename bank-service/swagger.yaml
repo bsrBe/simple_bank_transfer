@@ -1,0 +1,288 @@
+openapi: 3.0.0
+info:
+  title: Simple Bank API - Bank Management
+  version: 1.0.0
+  description: API for managing banks and bank accounts in the Simple Bank application
+servers:
+  - url: http://localhost:{port}/api/bank
+    description: Development server
+    variables:
+      port:
+        default: "3002"
+paths:
+  /banks:
+    post:
+      summary: Create a new bank
+      tags:
+        - Banks
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - name
+              properties:
+                name:
+                  type: string
+                  example: Example Bank
+      responses:
+        '201':
+          description: Bank created successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Bank created successfully
+                  bank:
+                    type: object
+                    properties:
+                      id:
+                        type: number
+                        example: 1
+                      name:
+                        type: string
+                        example: Example Bank
+        '500':
+          description: Error creating bank
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Error creating bank
+                  error:
+                    type: string
+                    example: Unknown error
+  /accounts:
+    post:
+      summary: Create a new bank account
+      tags:
+        - Bank Accounts
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - userId
+                - bankId
+              properties:
+                userId:
+                  type: string
+                  example: "123e4567-e89b-12d3-a456-426614174000"
+                bankId:
+                  type: number
+                  example: 1
+                balance:
+                  type: number
+                  format: float
+                  example: 0.0
+                  description: Initial balance (optional, defaults to 0)
+      responses:
+        '201':
+          description: Bank account created successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Bank account created successfully
+                  account:
+                    type: object
+                    properties:
+                      id:
+                        type: number
+                        example: 1
+                      userId:
+                        type: string
+                        example: "123e4567-e89b-12d3-a456-426614174000"
+                      bankId:
+                        type: number
+                        example: 1
+                      balance:
+                        type: number
+                        format: float
+                        example: 0.0
+        '500':
+          description: Error creating bank account
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Error creating bank account
+                  error:
+                    type: string
+                    example: Unknown error
+  /accounts/{userId}:
+    get:
+      summary: Retrieve bank account(s) by user ID
+      tags:
+        - Bank Accounts
+      parameters:
+        - in: path
+          name: userId
+          required: true
+          schema:
+            type: string
+          description: The ID of the user whose accounts are to be retrieved
+      responses:
+        '200':
+          description: Bank accounts fetched successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Bank accounts fetched successfully
+                  accounts:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        id:
+                          type: number
+                          example: 1
+                        userId:
+                          type: string
+                          example: "123e4567-e89b-12d3-a456-426614174000"
+                        bankId:
+                          type: number
+                          example: 1
+                        balance:
+                          type: number
+                          format: float
+                          example: 1000.50
+        '400':
+          description: Invalid user ID
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Invalid user ID
+        '404':
+          description: No accounts found for user
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: No accounts found for user
+        '500':
+          description: Error fetching bank accounts
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Error fetching bank accounts
+                  error:
+                    type: string
+                    example: Unknown error
+  /accounts/{userId}/balance:
+    put:
+      summary: Update the balance of a user's bank account
+      tags:
+        - Bank Accounts
+      parameters:
+        - in: path
+          name: userId
+          required: true
+          schema:
+            type: string
+          description: The ID of the user whose account balance is to be updated
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - amount
+              properties:
+                amount:
+                  type: number
+                  format: float
+                  example: 500.00
+                  description: The amount to add (positive for deposit, negative for withdrawal/transfer)
+      responses:
+        '200':
+          description: Balance updated successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Balance updated successfully
+                  account:
+                    type: object
+                    properties:
+                      id:
+                        type: number
+                        example: 1
+                      userId:
+                        type: string
+                        example: "123e4567-e89b-12d3-a456-426614174000"
+                      bankId:
+                        type: number
+                        example: 1
+                      balance:
+                        type: number
+                        format: float
+                        example: 1500.50
+        '400':
+          description: Invalid user ID or amount
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Invalid user ID or amount
+        '404':
+          description: Account not found
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Account not found
+        '500':
+          description: Error updating balance
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Error updating balance
+                  error:
+                    type: string
+                    example: Unknown errors

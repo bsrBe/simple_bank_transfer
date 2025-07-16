@@ -1,7 +1,7 @@
 import express, { Request , Response } from "express";
 import {User} from "./user.entity";
 import { AppDataSource } from "./data-source";
-
+import { bankServiceAPI } from "./utils/https";
 
 const userRepository = AppDataSource.getRepository(User);
 
@@ -73,5 +73,27 @@ export const getUser = async (req: Request, res: Response) => {
       message: "Error fetching user",
       error: error instanceof Error ? error.message : "Unknown error",
     });
+  }
+};
+
+
+
+export const getUserWithBalance = async (req: Request, res: Response) => {
+  try {
+    const id = req.params.id;
+    const user = await userRepository.findOneBy({ id });
+
+    if (!user) return res.status(404).json({ message: "User not found" });
+
+    // 🔁 Call bank-service for balance
+    const { data: account } = await bankServiceAPI.get(`/accounts/${id}`);
+
+    return res.json({
+      user,
+      account,
+    });
+  } catch (err: any) {
+    console.error("Error fetching balance:", err.message);
+    return res.status(500).json({ message: "Could not fetch balance" });
   }
 };

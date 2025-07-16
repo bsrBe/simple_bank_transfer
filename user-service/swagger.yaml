@@ -172,3 +172,77 @@ paths:
                   error:
                     type: string
                     example: Unknown error
+  /api/users/{id}/with-balance:
+    get:
+      summary: Retrieve a user and their bank account balance by ID
+      tags:
+        - Users
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: string
+          description: The user ID
+      responses:
+        '200':
+          description: User and balance fetched successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  user:
+                    type: object
+                    properties:
+                      id:
+                        type: string
+                        example: "123e4567-e89b-12d3-a456-426614174000"
+                      fullName:
+                        type: string
+                        example: John Doe
+                      email:
+                        type: string
+                        example: john.doe@example.com
+                      bankId:
+                        type: number
+                        example: 12345
+                  account:
+                    type: object
+                    properties:
+                      id:
+                        type: number
+                        example: 1
+                      userId:
+                        type: number
+                        example: 1
+                      bankId:
+                        type: number
+                        example: 12345
+                      balance:
+                        type: number
+                        format: float
+                        example: 1000.50
+        '404':
+          description: User not found
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: User not found
+        '500':
+          description: Error fetching balance
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Could not fetch balance
+                  error:
+                    type: string
+                    example: Unknown error
