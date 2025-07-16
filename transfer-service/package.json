@@ -1,0 +1,54 @@
+{
+  "dependencies": {
+    "amqplib": "^0.10.8",
+    "axios": "^1.10.0",
+    "bcrypt": "^6.0.0",
+    "cors": "^2.8.5",
+    "dotenv": "^17.2.0",
+    "express": "^5.1.0",
+    "ioredis": "^5.6.1",
+    "js-yaml": "^4.1.0",
+    "mysql2": "^3.14.2",
+    "redis": "^4.7.1",
+    "reflect-metadata": "^0.2.2",
+    "swagger-jsdoc": "^6.2.8",
+    "swagger-ui-express": "^5.0.1",
+    "ts-node-dev": "^2.0.0",
+    "typeorm": "^0.3.25"
+  },
+  "name": "transfer-service",
+  "version": "1.0.0",
+  "description": "This project is for learning purpose of mainly RabbitMQ but it includes express+typescript+mysql+typeOrm",
+  "main": "index.js",
+  "scripts": {
+    "start": "node dist/index.js",
+    "dev": "nodemon ",
+    "build": "tsc"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/bsrBe/simple_bank_transfer.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs",
+  "bugs": {
+    "url": "https://github.com/bsrBe/simple_bank_transfer/issues"
+  },
+  "homepage": "https://github.com/bsrBe/simple_bank_transfer#readme",
+  "devDependencies": {
+    "@types/amqplib": "^0.10.7",
+    "@types/axios": "^0.9.36",
+    "@types/bcrypt": "^5.0.2",
+    "@types/cors": "^2.8.19",
+    "@types/express": "^5.0.3",
+    "@types/ioredis": "^4.28.10",
+    "@types/js-yaml": "^4.0.9",
+    "@types/node": "^24.0.14",
+    "@types/nodemon": "^1.19.6",
+    "@types/swagger-ui-express": "^4.1.8",
+    "nodemon": "^3.1.10",
+    "typescript": "^5.8.3"
+  }
+}
