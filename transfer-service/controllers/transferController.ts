@@ -3,6 +3,7 @@ import { AppDataSource } from "../data-source";
 import { Transfer } from "../entity/transfer";
 import { bankServiceAPI } from "../utils/http";
 import { AxiosError } from "axios";
+import { producer } from "../utils/kafka";
 
 interface BankAccount {
   id: number;
@@ -63,19 +64,18 @@ export const createTransfer = async (req: Request, res: Response) => {
       return res.status(404).json({ message: "Receiver account not found" });
     }
 
-    // 3. Deduct sender
-    await bankServiceAPI.put(`/accounts/${senderId}/balance`, {
-      amount: -amount,
-    });
-
-    // 4. Add to receiver
-    await bankServiceAPI.put(`/accounts/${receiverId}/balance`, {
-      amount: amount,
-    });
-
     // 5. Save transfer record
     const transfer = transferRepo.create({ senderId, receiverId, amount });
     await transferRepo.save(transfer);
+
+    await producer.send({
+  topic: "transfer-events",
+  messages: [
+    {
+      value: JSON.stringify({ senderId, receiverId, amount }),
+    },
+  ],
+});
 
     return res.status(201).json({ message: "Transfer successful", transfer });
   } catch (err: any) {

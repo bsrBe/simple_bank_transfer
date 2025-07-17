@@ -4,6 +4,8 @@ import express, { Request, Response } from "express";
 import { AppDataSource } from "./data-source";
 import { setupSwagger } from "./swagger";
 import trasnferRoutes from "./routes/transferRoutes"
+import { producer } from "./utils/kafka";
+
 dotenv.config();
 const app = express();
 const PORT = process.env.PORT || 3003;
@@ -24,6 +26,7 @@ app.get("/", (req: Request, res: Response) => {
 // Initialize the database connection
 const startServer = async () => {
   try {
+    await producer.connect()
     await AppDataSource.initialize();
     console.log("Data Source has been initialized!");
 
@@ -34,5 +37,5 @@ const startServer = async () => {
     console.error("Error during Data Source initialization", error);
   }
 };
-
+;
 startServer();
