@@ -1,0 +1,114 @@
+openapi: 3.0.3
+info:
+  title: Transfer Service API
+  description: API for handling bank account transfers
+  version: 1.0.0
+servers:
+  - url: http://localhost:3003
+    description: Local development server
+paths:
+  /api/transfer:
+    post:
+      summary: Create a new transfer
+      description: Transfers a specified amount from a sender account to a receiver account.
+      operationId: createTransfer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - senderId
+                - receiverId
+                - amount
+              properties:
+                senderId:
+                  type: string
+                  format: uuid
+                  description: UUID of the sender's account
+                  example: "15636657-380d-4e3f-ba90-42fdd649e50f"
+                receiverId:
+                  type: string
+                  format: uuid
+                  description: UUID of the receiver's account
+                  example: "18dee7eae-6591-456a-9185-32bdf87e69c2"
+                amount:
+                  type: number
+                  format: float
+                  minimum: 0
+                  exclusiveMinimum: true
+                  description: Amount to transfer (must be positive)
+                  example: 100
+      responses:
+        '201':
+          description: Transfer created successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: "Transfer successful"
+                  transfer:
+                    $ref: '#/components/schemas/Transfer'
+        '400':
+          description: Invalid input or insufficient balance
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: "Invalid input: senderId, receiverId, and positive amount are required"
+        '404':
+          description: Sender or receiver account not found
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: "Sender account not found"
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: "Transfer failed"
+components:
+  schemas:
+    Transfer:
+      type: object
+      properties:
+        id:
+          type: integer
+          description: Unique identifier for the transfer
+          example: 1
+        senderId:
+          type: string
+          format: uuid
+          description: UUID of the sender's account
+          example: "15636657-380d-4e3f-ba90-42fdd649e50f"
+        receiverId:
+          type: string
+          format: uuid
+          description: UUID of the receiver's account
+          example: "18dee7eae-6591-456a-9185-32bdf87e69c2"
+        amount:
+          type: number
+          format: float
+          description: Amount transferred
+          example: 100
+        createdAt:
+          type: string
+          format: date-time
+          description: Timestamp when the transfer was created
+          example: "2025-07-16T16:31:00Z"

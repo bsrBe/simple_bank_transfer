@@ -1,0 +1,95 @@
+# Base URL for the transfer service
+@baseUrl = http://localhost:3003/api/transfer
+
+# Test 1: Successful transfer
+# senderId has balance 1999, amount 100 is valid
+POST {{baseUrl}}/ HTTP/1.1
+Content-Type: application/json
+
+{
+  "senderId": "e7980ec2-bf46-43d0-823f-77a9daeebd95",
+  "receiverId": "15636657-380d-4e3f-ba90-42fdd649e50f",
+  "amount": 1000
+}
+
+###
+
+# Test 2: Insufficient balance
+# senderId has balance 1999, amount 2000 is too high
+POST {{baseUrl}}/ HTTP/1.1
+Content-Type: application/json
+
+{
+  "senderId": "15636657-380d-4e3f-ba90-42fdd649e50f",
+  "receiverId": "18dee7eae-6591-456a-9185-32bdf87e69c2",
+  "amount": 2000
+}
+
+###
+
+# Test 3: Invalid input (negative amount)
+POST {{baseUrl}}/ HTTP/1.1
+Content-Type: application/json
+
+{
+  "senderId": "15636657-380d-4e3f-ba90-42fdd649e50f",
+  "receiverId": "18dee7eae-6591-456a-9185-32bdf87e69c2",
+  "amount": -50
+}
+
+###
+
+# Test 4: Invalid input (missing senderId)
+POST {{baseUrl}}/ HTTP/1.1
+Content-Type: application/json
+
+{
+  "receiverId": "18dee7eae-6591-456a-9185-32bdf87e69c2",
+  "amount": 100
+}
+
+###
+
+# Test 5: Invalid input (missing receiverId)
+POST {{baseUrl}}/ HTTP/1.1
+Content-Type: application/json
+
+{
+  "senderId": "15636657-380d-4e3f-ba90-42fdd649e50f",
+  "amount": 100
+}
+
+###
+
+# Test 6: Invalid input (missing amount)
+POST {{baseUrl}}/ HTTP/1.1
+Content-Type: application/json
+
+{
+  "senderId": "15636657-380d-4e3f-ba90-42fdd649e50f",
+  "receiverId": "18dee7eae-6591-456a-9185-32bdf87e69c2"
+}
+
+###
+
+# Test 7: Non-existent sender account
+POST {{baseUrl}}/ HTTP/1.1
+Content-Type: application/json
+
+{
+  "senderId": "99999999-9999-9999-9999-999999999999",
+  "receiverId": "18dee7eae-6591-456a-9185-32bdf87e69c2",
+  "amount": 100
+}
+
+###
+
+# Test 8: Non-existent receiver account
+POST {{baseUrl}}/ HTTP/1.1
+Content-Type: application/json
+
+{
+  "senderId": "15636657-380d-4e3f-ba90-42fdd649e50f",
+  "receiverId": "88888888-8888-8888-8888-888888888888",
+  "amount": 100
+}

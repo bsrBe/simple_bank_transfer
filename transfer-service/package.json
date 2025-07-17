@@ -39,7 +39,6 @@
   "homepage": "https://github.com/bsrBe/simple_bank_transfer#readme",
   "devDependencies": {
     "@types/amqplib": "^0.10.7",
-    "@types/axios": "^0.9.36",
     "@types/bcrypt": "^5.0.2",
     "@types/cors": "^2.8.19",
     "@types/express": "^5.0.3",
